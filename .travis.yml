@@ -1,0 +1,18 @@
+jobs:
+  include:
+    - language: node_js
+      node_js: 
+        - 13
+      services: 
+        - docker
+      script:
+        - docker --version
+        - docker build -t df9235cf0925 .
+        - docker tag udagram-feed $DOCKER_USERNAME/udagram-feed
+        - docker build -t 48803a3941d1 .
+        - docker tag udagram-users $DOCKER_USERNAME/udagram-users
+      
+      after_success:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push $DOCKER_USERNAME/udagram-feed
+        - docker push $DOCKER_USERNAME/udagram-users
