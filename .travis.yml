@@ -14,7 +14,7 @@ jobs:
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push $DOCKER_USERNAME/udagram-feed
-        
+
     - language: node_js
       node_js: 
         - 13
@@ -29,3 +29,18 @@ jobs:
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push $DOCKER_USERNAME/udagram-users
+
+    - language: minimal
+      services: 
+        - docker
+      script:
+        - docker --version
+        - cd udagram-frontend
+        - npm -v
+        - node -v
+        - docker build -t udagram-frontend .
+        - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend
+      
+      after_success:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push $DOCKER_USERNAME/udagram-frontend
