@@ -46,3 +46,17 @@ jobs:
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - docker push $DOCKER_USERNAME/udagram-frontend
+    
+    - language: minimal
+      services:
+        - docker
+      script:
+        - docker --version
+        - cd udagram-deploy
+        - docker build -t udagram-reverse-proxy . 
+        - docker tag udagram-reverse-proxy $DOCKER_USERNAME/udagram-reverse-proxy
+      
+      after_success:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push $DOCKER_USERNAME/udagram-reverse-proxy
+        
