@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: udagram-users
+  name: udagram-users
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: udagram-users
+  template:
+    metadata:
+      labels:
+        service: udagram-users
+    spec:
+      containers:
+      - image: docker.io/liev08/udagram-users
+        name: udagram-users
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+        env:
+        - name: URL
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: URL
+        - name: AWS_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: AWS_BUCKET
+        - name: AWS_PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: AWS_PROFILE
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: AWS_REGION
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: JWT_SECRET
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: POSTGRES_DB
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: env-vars
+              key: POSTGRES_HOST
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: env-vars
+              key: PORT
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: POSTGRES_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: env-secret
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - name: env-secret
+          mountPath: "/root/.aws"
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: env-secret
+        secret:
+          secretName: env-secret
