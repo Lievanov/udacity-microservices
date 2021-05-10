@@ -8,18 +8,18 @@ import bodyParser from 'body-parser';
 import {config} from './config/config';
 import {V0_USER_MODELS} from './controllers/v0/model.index';
 
-console.log("here!")
-console.log(process.env.POSTGRES_USERNAME);
-
 (async () => {
+
+  console.log(process.env.PORT)
+  console.log(process.env.POSTGRES_PASSWORD)
+  console.log(process.env.POSTGRES_USERNAME)
+
   await sequelize.addModels(V0_USER_MODELS);
   await sequelize.sync();
-
   const app = express();
   const port = process.env.PORT || 8080;
 
   app.use(bodyParser.json());
-
   app.use(cors({
     allowedHeaders: [
       'Origin', 'X-Requested-With',

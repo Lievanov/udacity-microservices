@@ -15,8 +15,8 @@ spec:
         service: udagram-users
     spec:
       containers:
-      - image: docker.io/liev08/udagram-users
-        name: udagram-users
+      - name: udagram-users
+        image: liev08/udagram-users
         imagePullPolicy: Always
         resources:
           requests:
@@ -61,11 +61,6 @@ spec:
             configMapKeyRef:
               name: env-vars
               key: POSTGRES_HOST
-        - name: PORT
-          valueFrom:
-            secretKeyRef:
-              name: env-vars
-              key: PORT
         - name: POSTGRES_USERNAME
           valueFrom:
             secretKeyRef:
@@ -73,14 +68,9 @@ spec:
               key: POSTGRES_USERNAME
         - name: POSTGRES_PASSWORD
           valueFrom:
-            configMapKeyRef:
+            secretKeyRef:
               name: env-secret
               key: POSTGRES_PASSWORD
-        volumeMounts:
-        - name: env-secret
-          mountPath: "/root/.aws"
-          readOnly: true
-      restartPolicy: Always
       volumes:
       - name: env-secret
         secret:
