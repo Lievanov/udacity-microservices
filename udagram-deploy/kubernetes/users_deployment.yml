@@ -17,6 +17,8 @@ spec:
       containers:
       - name: udagram-users
         image: liev08/udagram-users
+        ports:
+        - containerPort: 8080
         imagePullPolicy: Always
         resources:
           requests:
