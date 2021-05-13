@@ -9,11 +9,6 @@ import {config} from './config/config';
 import {V0_USER_MODELS} from './controllers/v0/model.index';
 
 (async () => {
-
-  console.log(process.env.PORT)
-  console.log(process.env.POSTGRES_PASSWORD)
-  console.log(process.env.POSTGRES_USERNAME)
-
   await sequelize.addModels(V0_USER_MODELS);
   await sequelize.sync();
   const app = express();
